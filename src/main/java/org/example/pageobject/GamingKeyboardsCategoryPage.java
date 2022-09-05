@@ -13,9 +13,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GamingKeyboardsCategoryPage extends BasePage {
-    private String categoryPath = "/s?k=gaming+keyboard&pd_rd_r=da8afc49-fa94-41c3-9d45-7e811ac33b10&pd_rd_w=gSHhP&pd_rd_wg"
-            + "=fx882&pf_rd_p=12129333-2117-4490-9c17-6d31baf0582a&pf_rd_r=XYWA244WM0H05HEYD0RE&ref=pd_gw_unk";
-
     private String sponsoredSpanXpath = "//span[@class='s-label-popover-default']/span";
 
     private String biggerPriceTextXpath = "//span[@class='a-price']/span";
@@ -49,11 +46,6 @@ public class GamingKeyboardsCategoryPage extends BasePage {
 
     public GamingKeyboardsCategoryPage(WebDriver webDriver) {
         super(webDriver);
-    }
-
-    public GamingKeyboardsCategoryPage open() {
-        webDriver.get("https://www.amazon.com" + categoryPath);
-        return this;
     }
 
     public GamingKeyboardsCategoryPage selectBrand(String brandName) {
