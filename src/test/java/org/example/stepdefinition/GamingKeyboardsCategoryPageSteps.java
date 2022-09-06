@@ -26,7 +26,7 @@ public class GamingKeyboardsCategoryPageSteps {
     }
 
     @Then("Every title contains chosen {string} on Gaming Keyboards Category Page")
-    public void everyTitleContainsChosenBrandName(String brandName){
+    public void everyTitleContainsChosenBrandName(String brandName) throws InterruptedException {
         boolean doesEveryTitleContainBrandName = gamingKeyboardsCategoryPage
                                                     .verifyEveryTitleContainsBrandName(brandName);
 
@@ -34,7 +34,7 @@ public class GamingKeyboardsCategoryPageSteps {
     }
 
     @Then("Items prices are between {string} and {string} on Gaming Keyboards Category Page")
-    public void itemsPricesAreInDefinedRange(String minPrice, String maxPrice){
+    public void itemsPricesAreInDefinedRange(String minPrice, String maxPrice) throws InterruptedException {
         boolean arePricesInChosenRange = gamingKeyboardsCategoryPage
                 .verifyPricesAreInChosenRange(Float.parseFloat(minPrice), Float.parseFloat(maxPrice));
 
@@ -42,7 +42,7 @@ public class GamingKeyboardsCategoryPageSteps {
     }
 
     @Then("Items prices are sorted ascendingly on Gaming Keyboards Category Page")
-    public void itemsPricesAreSortedAscendingly(){
+    public void itemsPricesAreSortedAscendingly() throws InterruptedException {
         boolean arePricesInAscendingOrder = gamingKeyboardsCategoryPage
                                                 .verifyPricesAreInAscendingOrder();
 

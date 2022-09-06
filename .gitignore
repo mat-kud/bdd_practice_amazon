@@ -1,3 +1,4 @@
 # Project exclude paths
 .idea
 target
+bdd_practice_amazon.iml

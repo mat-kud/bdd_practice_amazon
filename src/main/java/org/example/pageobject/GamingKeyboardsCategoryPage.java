@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GamingKeyboardsCategoryPage extends BasePage {
-    private String sponsoredSpanXpath = "//span[@class='s-label-popover-default']/span";
+    private final String sponsoredSpanXpath = ".//span[@class='s-label-popover-default']/span";
 
-    private String biggerPriceTextXpath = "//span[@class='a-price']/span";
+    private final String biggerPriceTextXpath = ".//div//span[@class='a-price']//span[@class='a-offscreen']";
 
     @FindBy(xpath = "//div[@data-component-type='s-search-result']//div[contains(@class,'s-card-container')]")
     List<WebElement> itemContainers;
@@ -32,7 +32,7 @@ public class GamingKeyboardsCategoryPage extends BasePage {
     @FindBy(id = "high-price")
     private WebElement maxPriceInput;
 
-    @FindBy(xpath = " //input[@aria-labelledby='a-autoid-1-announce']")
+    @FindBy(xpath = "//span[contains(@class,'a-button')]/span/input")
     private WebElement submitPriceRangeBtn;
 
     @FindBy(id = "a-autoid-0-announce")
@@ -73,13 +73,14 @@ public class GamingKeyboardsCategoryPage extends BasePage {
         return this;
     }
 
-    public boolean verifyEveryTitleContainsBrandName(String brandName) {
+    public boolean verifyEveryTitleContainsBrandName(String brandName) throws InterruptedException {
         boolean everyTitleContainsInputWord;
 
         while (true) {
+            Thread.sleep(500);
+
             everyTitleContainsInputWord = titlesList
                     .stream()
-                    .filter(e -> e.findElements(By.xpath(sponsoredSpanXpath)).isEmpty())
                     .map(WebElement::getText)
                     .map(String::toLowerCase)
                     .allMatch(e -> e.contains(brandName.toLowerCase()));
@@ -103,16 +104,18 @@ public class GamingKeyboardsCategoryPage extends BasePage {
         return everyTitleContainsInputWord;
     }
 
-    public boolean verifyPricesAreInChosenRange(float minPrice, float maxPrice) {
+    public boolean verifyPricesAreInChosenRange(float minPrice, float maxPrice) throws InterruptedException {
         boolean arePricesInChosenRange;
 
         while (true) {
+            Thread.sleep(500);
+
             arePricesInChosenRange = itemContainers
                     .stream()
-                    .filter(e -> e.findElements(By.xpath(sponsoredSpanXpath)).isEmpty())
-                    .map(e -> e.getAttribute("textContent").replace("$", ""))
-                    .filter(e -> !e.isEmpty())
-                    .map(Float::parseFloat)
+                    .filter(e -> e.findElements(By.xpath(sponsoredSpanXpath)).isEmpty()
+                            && !e.findElements(By.xpath(biggerPriceTextXpath)).isEmpty())
+                    .map(e -> Float.parseFloat(e.findElement(By.xpath(biggerPriceTextXpath))
+                            .getAttribute("textContent").replace("$", "")))
                     .allMatch(price -> price >= minPrice && price <= maxPrice);
 
             if (!arePricesInChosenRange) {
@@ -135,18 +138,19 @@ public class GamingKeyboardsCategoryPage extends BasePage {
         return arePricesInChosenRange;
     }
 
-    public boolean verifyPricesAreInAscendingOrder() {
+    public boolean verifyPricesAreInAscendingOrder() throws InterruptedException {
         boolean arePricesInAscendingOrder;
         List<Float> prices;
 
         while (true) {
+            Thread.sleep(500);
+
             prices = itemContainers
                     .stream()
-                    .filter(e -> e.findElements(By.xpath(sponsoredSpanXpath)).isEmpty())
-                    .map(e ->  e.findElement(By.xpath(biggerPriceTextXpath)))
-                    .map(e -> e.getAttribute("textContent").replace("$", ""))
-                    .filter(e -> !e.isEmpty())
-                    .map(Float::parseFloat)
+                    .filter(e -> e.findElements(By.xpath(sponsoredSpanXpath)).isEmpty()
+                            && !e.findElements(By.xpath(biggerPriceTextXpath)).isEmpty())
+                    .map(e -> Float.parseFloat(e.findElement(By.xpath(biggerPriceTextXpath))
+                            .getAttribute("textContent").replace("$", "")))
                     .collect(Collectors.toList());
 
             arePricesInAscendingOrder = verifyPricesInAscendingOrder(prices);
