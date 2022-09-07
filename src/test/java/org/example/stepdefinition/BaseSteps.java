@@ -13,9 +13,9 @@ public class BaseSteps {
         webDriver = new WebDriverFactory().getWebDriver();
     }
 
-    /*@After
+    @After
     public void afterScenario() {
         webDriver.close();
         webDriver.quit();
-    }*/
+    }
 }
