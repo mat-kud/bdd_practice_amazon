@@ -17,10 +17,14 @@ public class GamingKeyboardsCategoryPage extends BasePage {
 
     private final String biggerPriceTextXpath = ".//div//span[@class='a-price']//span[@class='a-offscreen']";
 
-    @FindBy(xpath = "//div[@data-component-type='s-search-result']//div[contains(@class,'s-card-container')]")
+    private final String titleXpath = "//div[contains(@class,'s-card-container')]//span[contains(@class,'a-size-medium')]";
+
+    private final String itemContainersXpath = "//div[@data-component-type='s-search-result']//div[contains(@class,'s-card-container')]";
+
+    @FindBy(xpath = itemContainersXpath)
     List<WebElement> itemContainers;
 
-    @FindBy(xpath = "//div[contains(@class,'s-card-container')]//span[contains(@class,'a-size-medium')]")
+    @FindBy(xpath = titleXpath)
     List<WebElement> titlesList;
 
     @FindBy(xpath = "(//a[contains(@class,\"a-expander-header\")])[2]")
@@ -48,41 +52,37 @@ public class GamingKeyboardsCategoryPage extends BasePage {
         super(webDriver);
     }
 
-    public GamingKeyboardsCategoryPage selectBrand(String brandName) {
+    public void selectBrand(String brandName) {
         JavascriptExecutor js = (JavascriptExecutor) webDriver;
         js.executeScript("arguments[0].click();", brandsExpander);
 
         WebElement brandNameCheckbox = new WebDriverWait(webDriver, Duration.ofSeconds(6))
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text() = '" + brandName + "']")));
         brandNameCheckbox.click();
-        return this;
     }
 
-    public GamingKeyboardsCategoryPage setPriceRange(float minPrice, float maxPrice) {
+    public void setPriceRange(float minPrice, float maxPrice) {
         waitForElementVisibility(minPriceInput);
         minPriceInput.sendKeys(String.valueOf(minPrice));
         maxPriceInput.sendKeys(String.valueOf(maxPrice));
         submitPriceRangeBtn.click();
-        return this;
     }
 
-    public GamingKeyboardsCategoryPage sortProductsByPriceLowToHigh() {
+    public void sortProductsByPriceLowToHigh() {
         waitForElementVisibility(sortingDropdownList);
         sortingDropdownList.click();
         lowToHighDropdownSelection.click();
-        return this;
     }
 
-    public boolean verifyEveryTitleContainsBrandName(String brandName) throws InterruptedException {
+    public boolean verifyEveryTitleContainsBrandName(String brandName) {
         boolean everyTitleContainsInputWord;
 
         while (true) {
-            Thread.sleep(500);
+            waitForElementPresence(titleXpath);
 
             everyTitleContainsInputWord = titlesList
                     .stream()
-                    .map(WebElement::getText)
-                    .map(String::toLowerCase)
+                    .map(element -> element.getText().toLowerCase())
                     .allMatch(e -> e.contains(brandName.toLowerCase()));
 
             if (!everyTitleContainsInputWord) {
@@ -104,11 +104,11 @@ public class GamingKeyboardsCategoryPage extends BasePage {
         return everyTitleContainsInputWord;
     }
 
-    public boolean verifyPricesAreInChosenRange(float minPrice, float maxPrice) throws InterruptedException {
+    public boolean verifyPricesAreInChosenRange(float minPrice, float maxPrice) {
         boolean arePricesInChosenRange;
 
         while (true) {
-            Thread.sleep(500);
+            waitForElementPresence(itemContainersXpath);
 
             arePricesInChosenRange = itemContainers
                     .stream()
@@ -138,12 +138,12 @@ public class GamingKeyboardsCategoryPage extends BasePage {
         return arePricesInChosenRange;
     }
 
-    public boolean verifyPricesAreInAscendingOrder() throws InterruptedException {
+    public boolean verifyPricesAreInAscendingOrder() {
         boolean arePricesInAscendingOrder;
         List<Float> prices;
 
         while (true) {
-            Thread.sleep(500);
+            waitForElementPresence(itemContainersXpath);
 
             prices = itemContainers
                     .stream()
@@ -187,5 +187,9 @@ public class GamingKeyboardsCategoryPage extends BasePage {
 
     private void waitForElementVisibility(WebElement element) {
         webDriverWait.until(ExpectedConditions.visibilityOf(element));
+    }
+
+    private void waitForElementPresence(String elementXpath){
+        webDriverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(elementXpath)));
     }
 }

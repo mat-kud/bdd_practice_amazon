@@ -10,51 +10,42 @@ import static org.example.stepdefinition.BaseSteps.*;
 public class GamingKeyboardsCategoryPageSteps {
     GamingKeyboardsCategoryPage gamingKeyboardsCategoryPage = new GamingKeyboardsCategoryPage(webDriver);
 
-    @And("User selects {string} on Gaming Keyboards Category Page")
-    public void userSelectsBrandOnGamingKeyboardsCategoryPage(String brandName){
+    @And("User selects {string}")
+    public void userSelectsBrandOnGamingKeyboardsCategoryPage(String brandName) {
         gamingKeyboardsCategoryPage.selectBrand(brandName);
     }
-    
-    @And("User sets {string} and {string} on Gaming Keyboards Category Page")
-    public void userSetsPriceRangeOnGamingCategoryPage(String minPrice, String maxPrice){
+
+    @And("User sets {string} and {string}")
+    public void userSetsPriceRangeOnGamingCategoryPage(String minPrice, String maxPrice) {
         gamingKeyboardsCategoryPage.setPriceRange(Float.parseFloat(minPrice), Float.parseFloat(maxPrice));
     }
 
-    @And("User sorts items by price ascendingly on Gaming Keyboards Category Page")
-    public void userSortsItemsByPriceAscendingly(){
+    @And("User sorts items by price ascendingly")
+    public void userSortsItemsByPriceAscendingly() {
         gamingKeyboardsCategoryPage.sortProductsByPriceLowToHigh();
     }
 
-    @Then("Every title contains chosen {string} on Gaming Keyboards Category Page")
-    public void everyTitleContainsChosenBrandName(String brandName) throws InterruptedException {
+    @Then("Every title contains chosen {string}")
+    public void everyTitleContainsChosenBrandName(String brandName) {
         boolean doesEveryTitleContainBrandName = gamingKeyboardsCategoryPage
-                                                    .verifyEveryTitleContainsBrandName(brandName);
+                .verifyEveryTitleContainsBrandName(brandName);
 
         Assert.assertTrue(doesEveryTitleContainBrandName, "Not every title contains chosen brand name");
     }
 
-    @Then("Items prices are between {string} and {string} on Gaming Keyboards Category Page")
-    public void itemsPricesAreInDefinedRange(String minPrice, String maxPrice) throws InterruptedException {
+    @Then("Items prices are between {string} and {string}")
+    public void itemsPricesAreInDefinedRange(String minPrice, String maxPrice) {
         boolean arePricesInChosenRange = gamingKeyboardsCategoryPage
                 .verifyPricesAreInChosenRange(Float.parseFloat(minPrice), Float.parseFloat(maxPrice));
 
         Assert.assertTrue(arePricesInChosenRange, "Prices are not within specified range");
     }
 
-    @Then("Items prices are sorted ascendingly on Gaming Keyboards Category Page")
-    public void itemsPricesAreSortedAscendingly() throws InterruptedException {
+    @Then("Items prices are sorted ascendingly")
+    public void itemsPricesAreSortedAscendingly() {
         boolean arePricesInAscendingOrder = gamingKeyboardsCategoryPage
-                                                .verifyPricesAreInAscendingOrder();
+                .verifyPricesAreInAscendingOrder();
 
         Assert.assertTrue(arePricesInAscendingOrder, "Prices are not in ascending order");
     }
-
-
-
-
-
-
-
-
-
 }
