@@ -15,7 +15,6 @@ public class BaseSteps {
 
     @After
     public void afterScenario() {
-        webDriver.close();
         webDriver.quit();
     }
 }
